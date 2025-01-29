@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="main.css">
+    <meta charset="UTF-8" />
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Electron app</title>
+  </head>
+  <body>
+    <div class="column left">
+      <h1>Questa è un'app fatta con Electron!</h1>
+      <p>👋</p>
+      <p id="info"></p>
+      <div class="dropdown">
+        <button class="dropbtn" id="selection">Cosa vuoi aprire?</button>
+        <div id="myDropdown" class="dropdown-content">
+          <span class="dropdown-link" id="img"> Immagine </span>
+          <span class="dropdown-link" id="pdf"> PDF </span>
+          <span class="dropdown-link" id="sql"> Database </span>
+        </div>
+      </div> <br>
+      <div class="pseudoForm" id="form-file" hidden="true">
+        <button type="button" id="select-file"></button><br>
+        <label id="file-label"></label><br>
+        <button type="button" id="view-file" disabled="true"></button><br>
+        <p id="file-path" hidden="true"></p>
+      </div>
+      <div class="pseudoForm" id="form-db" hidden="true">
+        <button type="button" id="select-db">Seleziona database</button><br>
+        <label id="db-label">Nessun database selezionato</label><br>
+        <button type="button" id="prepare-db" disabled="true">Connetti database</button><br>
+        <label id="prepared-db"></label><br>
+        <label for="choose-table" id="label-db" hidden="true">Scegli tabella:</label>
+        <select id="choose-table" name="tables" hidden="true"></select>
+        <button id="view-records" name="view" hidden="true">Visualizza tutti i record della tabella</button>
+      </div>
+    </div>
+    <div class="column right">
+      <p id="sub"></p>
+      <div class="box" id="img-box" hidden="true">
+        <p id="img-label"></p>
+        <img class="viewer" id="img-viewer" src="">
+      </div>
+      <div class="box" id="pdf-box" hidden="true">
+        <p id="pdf-label"></p>
+        <embed class="viewer" id="pdf-viewer" src="" type="application/pdf" frameBorder="0" scrolling="auto" height="90%" width="100%"></embed>
+      </div>
+      <div class="box" id="db-box" hidden="true">
+        <p id="db-viewer"></p>
+      </div>
+    </div>
+  </body>
+  <script src="./renderer.js"></script>
+</html>

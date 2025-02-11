@@ -2,7 +2,11 @@ var currentOption
 
 function printLog(message) {window.api.printLog(message)}
 
-function img_pdf(value) {
+/**
+ * Adapts the left-side menu to enable selection of pdf or image files
+ * @param {String} value - "img" if we want to select images, "pdf" for pdfs
+ */
+/*function img_pdf(value) {
     $("#form-file").show()
     $("#form-db").hide()
     switch (value) {
@@ -20,14 +24,16 @@ function img_pdf(value) {
     $("#view-file").attr("disabled", true)
 }
 
-$("#info").html(`Questa app usa Chrome (versione ${versions.chrome()}), Node.js (versione ${versions.node()}) ed Electron (versione ${versions.electron()})`)
+$("#info").html(`Questa app usa Chrome (versione ${versions.chrome()}), Node.js (versione ${versions.node()}) ed Electron (versione ${versions.electron()})`)*/
 
+/**
+ * Shows forms to select files and database
+ */
 $(".dropdown-link").on("click", function(event) {
     currentOption = event.target.id
     switch (currentOption) {
         case "img":
         case "pdf":
-            img_pdf(currentOption)
             break;
         case "sql":
             $("#form-file").hide()
@@ -66,7 +72,7 @@ $("#select-db").on("click", async () => {
 
 $("#prepare-db").on("click", async () => {
     try {
-        let result = await window.api.prepareDb();
+        let result = await window.api.prepareDb($("#db-label").html());
         if (result==true) $("#prepared-db").html("Database connesso");
         else $("#prepared-db").html("Connessione fallita");
     }
@@ -76,6 +82,7 @@ $("#prepare-db").on("click", async () => {
 
     try {
         let result = await window.api.fetchDb("SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'");
+        //let result = await window.api.fetchDb("SELECT profitto FROM first_table");
         $("#label-db").show()
         $("#choose-table").show()
         $("#view-records").show()

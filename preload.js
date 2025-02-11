@@ -9,6 +9,6 @@ contextBridge.exposeInMainWorld('versions', {
 contextBridge.exposeInMainWorld('api', {
     printLog: (message) => ipcRenderer.send("main:printLog", message),
     selectFile: (fileOption) => ipcRenderer.invoke("main:selectFile", fileOption),
-    prepareDb: () => ipcRenderer.invoke("main:prepareDb"),
+    prepareDb: (path) => ipcRenderer.invoke("main:prepareDb", path),
     fetchDb: (query, values="") => ipcRenderer.invoke("main:fetchDb", query, values)
 })

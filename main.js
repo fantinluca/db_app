@@ -29,8 +29,7 @@ async function fileOpen(event, fileOption) {
   if (!canceled) return filePaths[0]
 }
 
-async function prepareDb() {
-  let dbPath = "./db/electron.db"
+async function prepareDb(event, dbPath) {
   try {
     return await sqlite.setdbPath(dbPath)
   } catch (error) {

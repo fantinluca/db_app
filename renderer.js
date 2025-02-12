@@ -1,6 +1,9 @@
-var currentOption
+//import DataTable from "datatables.net-dt"
 
-function printLog(message) {window.api.printLog(message)}
+
+//var currentOption
+
+//function printLog(message) {window.api.printLog(message)}
 
 /**
  * Adapts the left-side menu to enable selection of pdf or image files
@@ -24,11 +27,9 @@ function printLog(message) {window.api.printLog(message)}
     $("#view-file").attr("disabled", true)
 }
 
-$("#info").html(`Questa app usa Chrome (versione ${versions.chrome()}), Node.js (versione ${versions.node()}) ed Electron (versione ${versions.electron()})`)*/
+$("#info").html(`Questa app usa Chrome (versione ${versions.chrome()}), Node.js (versione ${versions.node()}) ed Electron (versione ${versions.electron()})`)
 
-/**
- * Shows forms to select files and database
- */
+
 $(".dropdown-link").on("click", function(event) {
     currentOption = event.target.id
     switch (currentOption) {
@@ -62,10 +63,10 @@ $("#view-file").on("click", function() {
         (currentOption=="img") ? "l'immagine" : "il documento"
     } ${filePath}`)
     $(`#${currentOption}-viewer`).attr("src", filePath)
-})
+})*/
 
 $("#select-db").on("click", async () => {
-    let filePath = await window.api.selectFile(currentOption)
+    let filePath = await window.api.selectFile("sql")
     $("#db-label").html(filePath)
     $("#prepare-db").removeAttr("disabled")
 })
@@ -108,11 +109,13 @@ $("#view-records").on("click", async () => {
     }
     $("#db-viewer").html(`Ecco tutti i record della tabella ${selected}:`)
     let dbFields = Object.keys(result[0])
-    let tablePieces = ["<table id='record-table'>", "<tr>"]
+    let tablePieces = ["<table id='record-table'>", "<thead>", "<tr>"]
     jQuery.each(dbFields, function(index, value) {
         tablePieces.push(`<th>${value}</th>`)
     })
     tablePieces.push("</tr>")
+    tablePieces.push("</thead>")
+    tablePieces.push("<tbody>")
     jQuery.each(result, function(indexR, valueR) {
         tablePieces.push("<tr>")
         jQuery.each(dbFields, function(indexD, valueD) {
@@ -120,6 +123,9 @@ $("#view-records").on("click", async () => {
         })
         tablePieces.push("</tr>")
     })
+    tablePieces.push("</tbody>")
     tablePieces.push("</table>")
     $("#db-viewer").append(tablePieces.join(" "))
+
+    $("#record-table").DataTable()
 })

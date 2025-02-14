@@ -3,8 +3,10 @@ const { join } = require('node:path')
 const isMac = (process.platform == "darwin")
 const sqlite = require('sqlite-electron')
 
+function printLog(event, message) {console.log(message)}
+
 async function fileOpen(event, fileOption) {
-  printLog(event, fileOption)
+  //printLog(event, fileOption)
 
   let fileOptions
   switch (fileOption) {
@@ -67,6 +69,7 @@ app.whenReady().then(() => {
   ipcMain.handle("main:prepareDb", prepareDb)
   ipcMain.handle("main:fetchDb", fetchDb)
   ipcMain.on("main:printLog", printLog)
+
   createWindow()
 
   app.on('activate', () => {

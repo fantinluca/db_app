@@ -1,69 +1,46 @@
-//import DataTable from "datatables.net-dt"
-
-
-//var currentOption
-
-//function printLog(message) {window.api.printLog(message)}
-
-/**
- * Adapts the left-side menu to enable selection of pdf or image files
- * @param {String} value - "img" if we want to select images, "pdf" for pdfs
- */
-/*function img_pdf(value) {
-    $("#form-file").show()
-    $("#form-db").hide()
-    switch (value) {
-        case "img":
-            $("#select-file").html("Scegli immagine")
-            $("#file-label").html("Nessuna immagine selezionata")
-            $("#view-file").html("Visualizza immagine")
-            break
-        case "pdf":
-            $("#select-file").html("Scegli PDF")
-            $("#file-label").html("Nessun PDF selezionato")
-            $("#view-file").html("Visualizza PDF")
-            break
+$(async () => {
+    try {
+        let check = await window.api.prepareDb(window.constants.defaultDB);
+        if (check==true) $("#prepared-db").html("Database connesso");
+        else $("#prepared-db").html("Connessione fallita");
     }
-    $("#view-file").attr("disabled", true)
-}
-
-$("#info").html(`Questa app usa Chrome (versione ${versions.chrome()}), Node.js (versione ${versions.node()}) ed Electron (versione ${versions.electron()})`)
-
-
-$(".dropdown-link").on("click", function(event) {
-    currentOption = event.target.id
-    switch (currentOption) {
-        case "img":
-        case "pdf":
-            break;
-        case "sql":
-            $("#form-file").hide()
-            $("#form-db").show()
-            break;
+    catch (error) {
+        $("#prepared-db").html("Connessione fallita");
+        window.api.printLog(error)
     }
-})
 
-$(document).on("click", function(event) {
-    let clicked = event.target;
-    if (clicked.className!='dropbtn') $("#myDropdown").hide();
-    else $("#myDropdown").show();
-})
+    let selected = window.constants.defaultTable;
+    let result = await window.api.fetchDb(`SELECT * FROM ${selected}`)
+    if (result.length==0) {
+        $("#db-viewer").html(`La tabella ${selected} non ha record`)
+        $("#record-table").remove()
+        return
+    }
+    $("#db-viewer").html(`Ecco tutti i record della tabella ${selected}:`)
+    let dbFields = Object.keys(result[0])
+    let tablePieces = ["<table id='record-table'>", "<thead>", "<tr>"]
+    jQuery.each(dbFields, function(index, value) {
+        tablePieces.push(`<th>${value}</th>`)
+    })
+    tablePieces.push("</tr>")
+    tablePieces.push("</thead>")
+    tablePieces.push("<tbody>")
+    jQuery.each(result, function(indexR, valueR) {
+        tablePieces.push("<tr>")
+        jQuery.each(dbFields, function(indexD, valueD) {
+            tablePieces.push(`<td>${valueR[valueD]}</td>`)
+        })
+        tablePieces.push("</tr>")
+    })
+    tablePieces.push("</tbody>")
+    tablePieces.push("</table>")
+    $("#db-viewer").append(tablePieces.join(" "))
 
-$("#select-file").on("click", async() => {
-    let filePath = await window.api.selectFile(currentOption)
-    $("#file-label").html(filePath)
-    $("#view-file").removeAttr("disabled")
+    $("#record-table").DataTable({
+        scrollY: $("#db-box").height(),
+        scrollX: $(document).width(),
+    })
 })
-
-$("#view-file").on("click", function() {
-    $(".box").hide()
-    let filePath = $("#file-label").html()
-    $(`#${currentOption}-box`).show()
-    $(`#${currentOption}-label`).html(`Ecco ${
-        (currentOption=="img") ? "l'immagine" : "il documento"
-    } ${filePath}`)
-    $(`#${currentOption}-viewer`).attr("src", filePath)
-})*/
 
 $("#select-db").on("click", async () => {
     let filePath = await window.api.selectFile("sql")
@@ -83,7 +60,6 @@ $("#prepare-db").on("click", async () => {
 
     try {
         let result = await window.api.fetchDb("SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'");
-        //let result = await window.api.fetchDb("SELECT profitto FROM first_table");
         $("#label-db").show()
         $("#choose-table").show()
         $("#view-records").show()
@@ -127,5 +103,8 @@ $("#view-records").on("click", async () => {
     tablePieces.push("</table>")
     $("#db-viewer").append(tablePieces.join(" "))
 
-    $("#record-table").DataTable()
+    $("#record-table").DataTable({
+        scrollY: $("#db-box").height(),
+        scrollX: $(document).width(),
+    })
 })

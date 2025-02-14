@@ -40,6 +40,8 @@ $(async () => {
         scrollY: $("#db-box").height(),
         scrollX: $(document).width(),
     })
+    
+    window.api.setTablesMenu()
 })
 
 $("#select-db").on("click", async () => {

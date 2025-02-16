@@ -10,7 +10,6 @@ async function setTablesMenu() {
   let result = await fetchDb(null, "SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'", "")
 
   curWin = BrowserWindow.getAllWindows()[0]
-  //console.log(result)
 
   options = []
   result.forEach(element => {
@@ -24,18 +23,12 @@ async function setTablesMenu() {
     {
       label: "Cambia tabella",
       submenu: options
-    }/*,
-    {
-      label: "Cambia database",
-      click: () => curWin.webContents.send("setDB", fileOpen(null, 'db'))
-    }*/
+    }
   ])
   Menu.setApplicationMenu(tablesMenu)
 }
 
 async function fileOpen(event, fileOption) {
-  //printLog(event, fileOption)
-
   let fileOptions
   switch (fileOption) {
     case "img":

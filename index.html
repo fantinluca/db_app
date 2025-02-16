@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/datatables.net/js/dataTables.min.js"></script>
+    <link rel="stylesheet" href="node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
     <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
@@ -16,22 +17,9 @@
     <title>Electron app</title>
   </head>
   <body>
-    <div>
-      <!--
-      <div class="pseudoForm" id="form-db">
-        <button type="button" id="select-db">Cambia database</button><br>
-        <label id="db-label">Nessun database selezionato</label><br>
-        <button type="button" id="prepare-db" disabled="true">Connetti database</button><br>
-        <label id="prepared-db"></label><br>
-        <label for="choose-table" id="label-db" hidden="true">Cambia tabella:</label>
-        <select id="choose-table" name="tables" hidden="true"></select>
-        <button id="view-records" name="view" hidden="true">Visualizza tutti i record della tabella</button>
-      </div>
-      -->
-      <p id="sub"></p>
-      <div class="box" id="db-box">
-        <p id="db-viewer"></p>
-      </div>
+    <p id="sub"></p>
+    <div class="box" id="db-box">
+      <p id="db-viewer"></p>
     </div>
   </body>
   <script src="./renderer.js"></script>

@@ -18,5 +18,4 @@ contextBridge.exposeInMainWorld('api', {
   fetchDb: (query, values="") => ipcRenderer.invoke("main:fetchDb", query, values),
   setTablesMenu: () => ipcRenderer.send("main:setTablesMenu"),
   onDisplayTable: (callback) => ipcRenderer.on("displayTable", (event, value) => callback(value)),
-  //onSetDB: (callback) => ipcRenderer.on("setDB", (event, value) => callback(value))
 })

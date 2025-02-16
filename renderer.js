@@ -14,7 +14,7 @@ async function displayTable(table) {
     }
     $("#db-viewer").html(`Ecco tutti i record della tabella ${table}:`)
     let dbFields = Object.keys(result[0])
-    let tablePieces = ["<table id='record-table'>", "<thead>", "<tr>"]
+    let tablePieces = ["<table id='record-table' class='hover order-column'>", "<thead>", "<tr>"]
     jQuery.each(dbFields, function(index, value) {
         tablePieces.push(`<th>${value}</th>`)
     })
@@ -35,11 +35,12 @@ async function displayTable(table) {
     $("#record-table").DataTable({
         scrollY: $("#db-box").height(),
         scrollX: $(document).width(),
+        paging: false,
     })
 }
 
 /**
- * When page is opened, connect to default database and displaya default table
+ * When page is opened, connect to default database and display default table
  */
 $(async () => {
     try {

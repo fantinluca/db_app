@@ -16,5 +16,7 @@ contextBridge.exposeInMainWorld('api', {
   selectFile: (fileOption) => ipcRenderer.invoke("main:selectFile", fileOption),
   prepareDb: (path) => ipcRenderer.invoke("main:prepareDb", path),
   fetchDb: (query, values="") => ipcRenderer.invoke("main:fetchDb", query, values),
-  setTablesMenu: () => ipcRenderer.send("main:setTablesMenu")
+  setTablesMenu: () => ipcRenderer.send("main:setTablesMenu"),
+  onDisplayTable: (callback) => ipcRenderer.on("displayTable", (event, value) => callback(value)),
+  //onSetDB: (callback) => ipcRenderer.on("setDB", (event, value) => callback(value))
 })

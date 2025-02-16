@@ -1,22 +1,13 @@
-$(async () => {
-    try {
-        let check = await window.api.prepareDb(window.constants.defaultDB);
-        if (check==true) $("#prepared-db").html("Database connesso");
-        else $("#prepared-db").html("Connessione fallita");
-    }
-    catch (error) {
-        $("#prepared-db").html("Connessione fallita");
-        window.api.printLog(error)
-    }
+async function displayTable(table) {
+    $("#record-table").remove()
 
-    let selected = window.constants.defaultTable;
-    let result = await window.api.fetchDb(`SELECT * FROM ${selected}`)
+    let result = await window.api.fetchDb(`SELECT * FROM ${table}`)
     if (result.length==0) {
         $("#db-viewer").html(`La tabella ${selected} non ha record`)
         $("#record-table").remove()
         return
     }
-    $("#db-viewer").html(`Ecco tutti i record della tabella ${selected}:`)
+    $("#db-viewer").html(`Ecco tutti i record della tabella ${table}:`)
     let dbFields = Object.keys(result[0])
     let tablePieces = ["<table id='record-table'>", "<thead>", "<tr>"]
     jQuery.each(dbFields, function(index, value) {
@@ -40,9 +31,32 @@ $(async () => {
         scrollY: $("#db-box").height(),
         scrollX: $(document).width(),
     })
+}
+
+$(async () => {
+    try {
+        let check = await window.api.prepareDb(window.constants.defaultDB);
+        if (check==true) $("#prepared-db").html("Database connesso");
+        else $("#prepared-db").html("Connessione fallita");
+    }
+    catch (error) {
+        $("#prepared-db").html("Connessione fallita");
+        window.api.printLog(error)
+    }
+
+    let selected = window.constants.defaultTable;
+    await displayTable(selected)
     
     window.api.setTablesMenu()
 })
+
+window.api.onDisplayTable((value) => {
+    displayTable(value)
+})
+
+/*window.api.onSetDB((value) => {
+
+})*/
 
 $("#select-db").on("click", async () => {
     let filePath = await window.api.selectFile("sql")

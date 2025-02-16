@@ -1,3 +1,4 @@
+const { ipcRenderer } = require('electron')
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron/main')
 const { join } = require('node:path')
 const isMac = (process.platform == "darwin")
@@ -8,18 +9,26 @@ function printLog(event, message) {console.log(message)}
 async function setTablesMenu() {
   let result = await fetchDb(null, "SELECT name FROM sqlite_schema WHERE type ='table' AND name NOT LIKE 'sqlite_%'", "")
 
+  curWin = BrowserWindow.getAllWindows()[0]
+  //console.log(result)
+
   options = []
   result.forEach(element => {
-     options.push({
-      label: element["name"]
-     })
+    options.push({
+      label: element["name"],
+      click: () => curWin.webContents.send("displayTable", element["name"])
+    })
   })
   
   tablesMenu = Menu.buildFromTemplate([
     {
       label: "Cambia tabella",
       submenu: options
-    }
+    }/*,
+    {
+      label: "Cambia database",
+      click: () => curWin.webContents.send("setDB", fileOpen(null, 'db'))
+    }*/
   ])
   Menu.setApplicationMenu(tablesMenu)
 }
@@ -82,12 +91,7 @@ const createWindow = () => {
 
   tablesMenu = Menu.buildFromTemplate([
     {
-      label: "Cambia tabella",
-      submenu: [
-        {
-          label: "Attendi..."
-        }
-      ]
+      label: "Attendi"
     }
   ])
   Menu.setApplicationMenu(tablesMenu)

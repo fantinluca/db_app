@@ -1,6 +1,7 @@
 const { ipcRenderer } = require('electron')
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron/main')
 const { join } = require('node:path')
+const { configure, setSync, getSync, file, hasSync } = require('electron-settings')
 const isMac = (process.platform == "darwin")
 const sqlite = require('sqlite-electron')
 
@@ -26,6 +27,17 @@ async function setTablesMenu() {
     }
   ])
   Menu.setApplicationMenu(tablesMenu)
+}
+
+function changePage(event, path) {
+  setSync("db_path", path)
+  curWin = BrowserWindow.getAllWindows()[0].loadFile("htmls/db_view.html")
+}
+
+function getDbPath() { 
+  tmp = getSync("db_path")
+  console.log(tmp)
+  return tmp
 }
 
 async function fileOpen(event, fileOption) {
@@ -54,7 +66,7 @@ async function fileOpen(event, fileOption) {
 
 async function prepareDb(event, dbPath) {
   try {
-    return await sqlite.setdbPath(dbPath)
+    return await sqlite.setdbPath((dbPath=="") ? getDbPath() : dbPath )
   } catch (error) {
     console.log(error)
     return error
@@ -82,20 +94,29 @@ const createWindow = () => {
     }
   })
 
-  tablesMenu = Menu.buildFromTemplate([
-    {
-      label: "Attendi"
-    }
-  ])
-  Menu.setApplicationMenu(tablesMenu)
-
-  win.loadFile('index.html')
+  //settings
+  configure()
+  if (hasSync("db_path")) {
+    tablesMenu = Menu.buildFromTemplate([
+      {
+        label: "Attendi"
+      }
+    ])
+    Menu.setApplicationMenu(tablesMenu)
+  
+    win.loadFile('htmls/db_view.html')
+  }
+  else {
+    win.loadFile('htmls/db_first_select.html')
+  }
 }
 
 app.whenReady().then(() => {
   ipcMain.handle("main:selectFile", fileOpen)
   ipcMain.handle("main:prepareDb", prepareDb)
   ipcMain.handle("main:fetchDb", fetchDb)
+  ipcMain.handle("main:getDbPath", getDbPath)
+  ipcMain.on("main:changePage", changePage)
   ipcMain.on("main:printLog", printLog)
   ipcMain.on("main:setTablesMenu", setTablesMenu)
 

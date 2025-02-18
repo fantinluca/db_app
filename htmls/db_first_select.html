@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="./../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./../node_modules/datatables.net/js/dataTables.min.js"></script>
+    <link rel="stylesheet" href="./../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Electron app</title>
+  </head>
+  <body>
+    <div>
+        <h2> Benvenuto nell'app! </h2>
+    </div>  
+    <div id="db_form">
+        <p id="button-label">Che database vuoi usare (solo file .db)</p>
+        <button type="button" id="select_db">Seleziona il database</button>
+        <label for="select_db"></label><br><br>
+        <label for="copy_db">Copia file del database in cartella app</label>
+        <input type="checkbox" id="copy_db"><br><br>
+        <button type="button" id="send_db" disabled="true">Conferma</button>
+    </div>
+  </body>
+  <script src="./../renderers/db_first_select.js"></script>
+</html>

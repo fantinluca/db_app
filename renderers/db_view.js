@@ -44,7 +44,8 @@ async function displayTable(table) {
  */
 $(async () => {
     try {
-        let check = await window.api.prepareDb(window.constants.defaultDB);
+        //let db = window.api.getDbPath()
+        let check = await window.api.prepareDb()
         if (check==true) $("#prepared-db").html("Database connesso");
         else $("#prepared-db").html("Connessione fallita");
     }
